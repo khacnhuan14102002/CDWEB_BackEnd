@@ -6,6 +6,7 @@ import web.backend.model.KhachHang;
 import web.backend.repository.KhachHangRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KhachHangServiceImpl implements IKhachHangService {
@@ -32,4 +33,9 @@ public class KhachHangServiceImpl implements IKhachHangService {
     public void delete(Long id) {
         khachHangRepository.deleteById(id);
     }
+    @Override
+    public Optional<KhachHang> login(String email, String matKhau) {
+        return khachHangRepository.findByEmailAndMatKhau(email, matKhau);
+    }
+
 }

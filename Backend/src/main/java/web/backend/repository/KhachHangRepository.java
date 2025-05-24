@@ -3,4 +3,8 @@ package web.backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import web.backend.model.*;
 
-public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {}
+import java.util.Optional;
+
+public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
+    Optional<KhachHang> findByEmailAndMatKhau(String email, String matKhau);
+}
