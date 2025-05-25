@@ -2,10 +2,14 @@ package web.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import web.backend.DTO.SanPhamChiTietDTO;
+import web.backend.DTO.SanPhamDTO;
 import web.backend.model.SanPham;
+import web.backend.model.SanPhamChiTiet;
 import web.backend.service.ISanPhamService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sanpham")
@@ -13,15 +17,26 @@ public class SanPhamController {
 
     @Autowired
     private ISanPhamService sanPhamService;
+    @GetMapping("/danhmuc/{id}")
+    public List<SanPham> getByDanhMuc(@PathVariable Long id) {
+        return sanPhamService.getByDanhMucId(id);
+    }
+    @GetMapping("/type/{typeId}")
+    public List<SanPhamDTO> getByType(@PathVariable Long typeId) {
+        List<SanPham> sanPhams = sanPhamService.getByTypeId(typeId);
+        return sanPhams.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
     @GetMapping
-    public List<SanPham> getAll() {
-        return sanPhamService.getAll();
+    public List<SanPhamDTO> getAll() {
+        List<SanPham> sanPhams = sanPhamService.getAll();
+        return sanPhams.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public SanPham getById(@PathVariable Long id) {
-        return sanPhamService.getById(id);
+    public SanPhamDTO getById(@PathVariable Long id) {
+        SanPham sanPham = sanPhamService.getById(id);
+        return convertToDTO(sanPham);
     }
 
     @PostMapping
@@ -38,5 +53,26 @@ public class SanPhamController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         sanPhamService.delete(id);
+    }
+
+    private SanPhamDTO convertToDTO(SanPham sanPham) {
+        SanPhamDTO dto = new SanPhamDTO();
+        dto.setMaSP(sanPham.getMaSP());
+        dto.setTenSP(sanPham.getTenSP());
+        dto.setMoTa(sanPham.getMoTa());
+        dto.setHinhAnh(sanPham.getHinhAnh());
+        dto.setChiTietList(sanPham.getChiTietList().stream()
+                .map(this::convertToChiTietDTO)
+                .collect(Collectors.toList()));
+        return dto;
+    }
+
+    private SanPhamChiTietDTO convertToChiTietDTO(SanPhamChiTiet chiTiet) {
+        SanPhamChiTietDTO dto = new SanPhamChiTietDTO();
+        dto.setId(chiTiet.getId());
+        dto.setKichCo(chiTiet.getKichCo());
+        dto.setGia(chiTiet.getGia());
+        dto.setSoLuong(chiTiet.getSoLuong());
+        return dto;
     }
 }

@@ -12,7 +12,6 @@ public class KhachHang {
     private String hoTen;
     private String email;
     private String soDienThoai;
-    private String diaChi;
     private String matKhau;
     private LocalDate ngayDangKy;
 
@@ -28,9 +27,6 @@ public class KhachHang {
 
     public String getSoDienThoai() { return soDienThoai; }
     public void setSoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
-
-    public String getDiaChi() { return diaChi; }
-    public void setDiaChi(String diaChi) { this.diaChi = diaChi; }
 
     public String getMatKhau() { return matKhau; }
     public void setMatKhau(String matKhau) { this.matKhau = matKhau; }

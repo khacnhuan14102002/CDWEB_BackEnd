@@ -32,4 +32,15 @@ public class SanPhamServiceImpl implements ISanPhamService {
     public void delete(Long id) {
         sanPhamRepository.deleteById(id);
     }
+    @Override
+    public List<SanPham> getByDanhMucId(Long maDanhMuc) {
+        return sanPhamRepository.findByDanhMuc_MaDanhMuc(maDanhMuc);
+    }
+
+    @Override
+    public List<SanPham> getByTypeId(Long typeId) {
+        return sanPhamRepository.findByTypeMaType(typeId);
+    }
+
+
 }

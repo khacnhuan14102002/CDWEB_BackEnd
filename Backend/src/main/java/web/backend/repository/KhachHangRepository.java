@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface KhachHangRepository extends JpaRepository<KhachHang, Long> {
     Optional<KhachHang> findByEmailAndMatKhau(String email, String matKhau);
+    Optional<KhachHang> findByEmail(String email);
 }

@@ -8,4 +8,8 @@ public interface ISanPhamService {
     SanPham getById(Long id);
     SanPham save(SanPham sanPham);
     void delete(Long id);
+
+    List<SanPham> getByDanhMucId(Long maDanhMuc);
+    List<SanPham> getByTypeId(Long typeId);
+
 }

@@ -30,4 +30,15 @@ public class KhachHangController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai email hoặc mật khẩu!");
         }
     }
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody KhachHang khachHang) {
+        String message = khachHangService.register(khachHang);
+        return ResponseEntity.ok(message);
+    }
+    @PostMapping("/check-email")
+    public ResponseEntity<String> checkEmail(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        boolean exists = khachHangService.emailExists(email);
+        return exists ? ResponseEntity.status(HttpStatus.CONFLICT).body("Email đã tồn tại!") : ResponseEntity.ok("Email hợp lệ.");
+    }
 }
