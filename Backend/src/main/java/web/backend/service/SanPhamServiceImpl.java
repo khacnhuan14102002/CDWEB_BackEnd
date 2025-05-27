@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class SanPhamServiceImpl implements ISanPhamService {
-
     @Autowired
     private SanPhamRepository sanPhamRepository;
 
@@ -32,15 +31,30 @@ public class SanPhamServiceImpl implements ISanPhamService {
     public void delete(Long id) {
         sanPhamRepository.deleteById(id);
     }
+
     @Override
     public List<SanPham> getByDanhMucId(Long maDanhMuc) {
+        // Calls the corrected repository method
         return sanPhamRepository.findByDanhMuc_MaDanhMuc(maDanhMuc);
     }
 
     @Override
     public List<SanPham> getByTypeId(Long typeId) {
-        return sanPhamRepository.findByTypeMaType(typeId);
+        return sanPhamRepository.findByType_maType(typeId);
     }
 
-
+    @Override
+    public List<SanPham> filterByDanhMucAndTypes(Long danhMucId, List<Long> typeIds) {
+        if (danhMucId != null && typeIds != null && !typeIds.isEmpty()) {
+            // Calls the corrected repository method
+            return sanPhamRepository.findByDanhMuc_MaDanhMucAndType_maTypeIn(danhMucId, typeIds);
+        } else if (danhMucId != null) {
+            // Calls the corrected repository method
+            return sanPhamRepository.findByDanhMuc_MaDanhMuc(danhMucId);
+        } else if (typeIds != null && !typeIds.isEmpty()) {
+            return sanPhamRepository.findByType_maTypeIn(typeIds);
+        } else {
+            return sanPhamRepository.findAll();
+        }
+    }
 }
