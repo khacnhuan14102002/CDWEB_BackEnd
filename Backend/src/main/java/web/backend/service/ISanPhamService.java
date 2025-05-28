@@ -13,4 +13,6 @@ public interface ISanPhamService {
     List<SanPham> filterByDanhMucAndTypes(Long danhmuc, List<Long> types);
 
     List<SanPham> getOldestProducts(int limit);
+
+    List<SanPham> searchByKeyword(String keyword);
 }

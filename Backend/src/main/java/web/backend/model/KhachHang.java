@@ -15,6 +15,9 @@ public class KhachHang {
     private String matKhau;
     private LocalDate ngayDangKy;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'user'")
+    private String role = "user";
+
     // Getters & Setters
     public Long getMaKH() { return maKH; }
     public void setMaKH(Long maKH) { this.maKH = maKH; }
@@ -33,4 +36,7 @@ public class KhachHang {
 
     public LocalDate getNgayDangKy() { return ngayDangKy; }
     public void setNgayDangKy(LocalDate ngayDangKy) { this.ngayDangKy = ngayDangKy; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

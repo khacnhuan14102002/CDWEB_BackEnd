@@ -25,4 +25,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> { ;
         return findOldestProducts((Pageable) PageRequest.of(0, limit));
     }
 
+    @Query("SELECT s FROM SanPham s WHERE LOWER(s.tenSP) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<SanPham> searchByKeyword(String keyword);
+
 }

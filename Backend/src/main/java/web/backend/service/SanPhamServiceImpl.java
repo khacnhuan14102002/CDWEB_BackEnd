@@ -62,4 +62,9 @@ public class SanPhamServiceImpl implements ISanPhamService {
         return sanPhamRepository.findOldestProducts(limit);
     }
 
+    @Override
+    public List<SanPham> searchByKeyword(String keyword) {
+        return sanPhamRepository.searchByKeyword(keyword);
+    }
+
 }

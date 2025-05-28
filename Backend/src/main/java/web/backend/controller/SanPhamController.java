@@ -97,5 +97,10 @@ public class SanPhamController {
         List<SanPham> oldest = sanPhamService.getOldestProducts(10); // Lấy 10 sản phẩm cũ nhất
         return oldest.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+    @GetMapping("/search")
+    public List<SanPhamDTO> searchByKeyword(@RequestParam String keyword) {
+        List<SanPham> results = sanPhamService.searchByKeyword(keyword);
+        return results.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
 }
