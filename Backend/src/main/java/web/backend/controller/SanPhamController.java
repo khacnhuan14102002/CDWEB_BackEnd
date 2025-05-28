@@ -92,4 +92,10 @@ public class SanPhamController {
         dto.setSoLuong(chiTiet.getSoLuong());
         return dto;
     }
+    @GetMapping("/oldest")
+    public List<SanPhamDTO> getOldestProducts() {
+        List<SanPham> oldest = sanPhamService.getOldestProducts(10); // Lấy 10 sản phẩm cũ nhất
+        return oldest.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
 }

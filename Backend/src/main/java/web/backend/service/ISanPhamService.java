@@ -11,4 +11,6 @@ public interface ISanPhamService {
     List<SanPham> getByDanhMucId(Long maDanhMuc);
     List<SanPham> getByTypeId(Long typeId);
     List<SanPham> filterByDanhMucAndTypes(Long danhmuc, List<Long> types);
+
+    List<SanPham> getOldestProducts(int limit);
 }

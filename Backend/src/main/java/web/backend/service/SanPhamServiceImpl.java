@@ -57,4 +57,9 @@ public class SanPhamServiceImpl implements ISanPhamService {
             return sanPhamRepository.findAll();
         }
     }
+    @Override
+    public List<SanPham> getOldestProducts(int limit) {
+        return sanPhamRepository.findOldestProducts(limit);
+    }
+
 }

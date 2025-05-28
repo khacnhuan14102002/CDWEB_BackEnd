@@ -1,4 +1,5 @@
     package web.backend.service;
+    import jakarta.transaction.Transactional;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.*;
     import web.backend.DTO.CartItemDTO;
@@ -67,5 +68,9 @@
                 item.setSoLuong(newQuantity);
                 cartItemRepository.save(item);
             }
+        }
+        @Transactional
+        public void clearCartByUserId(String userId) {
+            cartItemRepository.deleteByUserId(userId);
         }
     }

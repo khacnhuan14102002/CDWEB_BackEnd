@@ -1,7 +1,11 @@
 package web.backend.repository;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import web.backend.model.SanPham;
+
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -14,4 +18,11 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> { ;
     List<SanPham> findByType_maTypeIn(List<Long> typeIds);
 
     List<SanPham> findByDanhMuc_MaDanhMucAndType_maTypeIn(Long danhMucId, List<Long> typeIds);
+    @Query("SELECT s FROM SanPham s ORDER BY s.maSP ASC")
+    List<SanPham> findOldestProducts(Pageable pageable);
+
+    default List<SanPham> findOldestProducts(int limit) {
+        return findOldestProducts((Pageable) PageRequest.of(0, limit));
+    }
+
 }

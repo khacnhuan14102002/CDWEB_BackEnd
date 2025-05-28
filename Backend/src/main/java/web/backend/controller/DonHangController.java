@@ -23,7 +23,10 @@ public class DonHangController {
     public DonHang getById(@PathVariable Long id) {
         return donHangService.getById(id);
     }
-
+    @GetMapping("/khachhang/{maKH}")
+    public List<DonHang> getByKhachHangId(@PathVariable Long maKH) {
+        return donHangService.getByKhachHangId(maKH);
+    }
     @PostMapping
     public DonHang create(@RequestBody DonHang donHang) {
         return donHangService.save(donHang);

@@ -9,4 +9,5 @@ public interface IDonHangService {
     DonHang save(DonHang donHang);
     void delete(Long id);
 
+    List<DonHang> getByKhachHangId(Long maKH);
 }

@@ -1,5 +1,6 @@
 package web.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +10,7 @@ public class ChiTietDonHang {
     private Long maCT;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "maDH")
     private DonHang donHang;
 

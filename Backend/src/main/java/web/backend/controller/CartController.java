@@ -33,4 +33,8 @@ public class CartController {
     public void updateCartItemQuantity(@PathVariable Long id, @RequestBody CartItem updatedItem) {
         cartService.updateQuantity(id, updatedItem.getSoLuong());
     }
+    @DeleteMapping("/clear/{userId}")
+    public void clearCart(@PathVariable String userId) {
+        cartService.clearCartByUserId(userId);
+    }
 }

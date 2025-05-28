@@ -32,5 +32,9 @@ public class DonHangServiceImpl implements IDonHangService {
     public void delete(Long id) {
         donHangRepository.deleteById(id);
     }
+    @Override
+    public List<DonHang> getByKhachHangId(Long maKH) {
+        return donHangRepository.findByKhachHang_MaKH(maKH);
+    }
 
 }

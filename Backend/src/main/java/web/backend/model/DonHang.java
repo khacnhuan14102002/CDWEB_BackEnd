@@ -1,5 +1,6 @@
 package web.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +22,7 @@ public class DonHang {
     private String diaChi;
     // Getters & Setters
     @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ChiTietDonHang> chiTietDonHang;
 
     public DonHang() {
