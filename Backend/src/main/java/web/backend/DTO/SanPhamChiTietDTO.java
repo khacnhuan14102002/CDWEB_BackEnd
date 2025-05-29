@@ -5,7 +5,7 @@ public class SanPhamChiTietDTO {
     private String kichCo;
     private double gia;
     private int soLuong;
-
+    private String maSP;
     // Getters and Setters
     public Long getId() {
         return id;
@@ -26,7 +26,13 @@ public class SanPhamChiTietDTO {
     public double getGia() {
         return gia;
     }
+    public String getMaSP() {
+        return maSP;
+    }
 
+    public void setMaSP(String maSP) {
+        this.maSP = maSP;
+    }
     public void setGia(double gia) {
         this.gia = gia;
     }

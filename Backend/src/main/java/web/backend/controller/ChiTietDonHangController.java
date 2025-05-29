@@ -62,10 +62,7 @@ public class ChiTietDonHangController {
         return service.findByDonHangId(maDH);
     }
 
-//    @PostMapping
-//    public ChiTietDonHang create(@RequestBody ChiTietDonHang chiTiet) {
-//        return service.save(chiTiet);
-//    }
+
 
     @PutMapping("/{id}")
     public ChiTietDonHang update(@PathVariable Long id, @RequestBody ChiTietDonHang chiTiet) {

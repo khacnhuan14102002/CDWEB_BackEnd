@@ -51,12 +51,16 @@ public class SanPhamController {
 
     @PostMapping
     public SanPham create(@RequestBody SanPham sanPham) {
+        // Khi tạo mới, maSP của sản phẩm cha sẽ được gán tự động sau khi save
+        // Logic thiết lập mối quan hệ hai chiều sẽ nằm trong service
         return sanPhamService.save(sanPham);
     }
 
     @PutMapping("/{id}")
     public SanPham update(@PathVariable Long id, @RequestBody SanPham sanPham) {
+        // Đảm bảo maSP của sản phẩm cha được thiết lập từ URL path
         sanPham.setMaSP(id);
+        // Logic thiết lập mối quan hệ hai chiều và quản lý chi tiết sẽ nằm trong service
         return sanPhamService.save(sanPham);
     }
 
@@ -72,35 +76,59 @@ public class SanPhamController {
         dto.setTenSP(sanPham.getTenSP());
         dto.setMoTa(sanPham.getMoTa());
         dto.setHinhAnh(sanPham.getHinhAnh());
-        // Ensure chiTietList is not null before streaming
+
+        if (sanPham.getDanhMuc() != null) {
+            dto.setMaDanhMuc(sanPham.getDanhMuc().getMaDanhMuc());
+            dto.setTenDanhMuc(sanPham.getDanhMuc().getTenDanhMuc());
+        } else {
+            dto.setMaDanhMuc(null);
+            dto.setTenDanhMuc("Không xác định");
+        }
+
+        if (sanPham.getType() != null) {
+            dto.setMaType(sanPham.getType().getMaType());
+            dto.setTenType(sanPham.getType().getTenType());
+        } else {
+            dto.setMaType(null);
+            dto.setTenType("Không xác định");
+        }
+
         if (sanPham.getChiTietList() != null) {
             dto.setChiTietList(sanPham.getChiTietList().stream()
-                    .map(this::convertToChiTietDTO)
+                    .map(chiTiet -> convertToChiTietDTO(chiTiet, sanPham.getMaSP()))
                     .collect(Collectors.toList()));
         } else {
-            dto.setChiTietList(new ArrayList<>()); // Initialize with an empty list
+            dto.setChiTietList(new ArrayList<>());
         }
         return dto;
     }
 
-    // Helper method to convert SanPhamChiTiet entity to SanPhamChiTietDTO
-    private SanPhamChiTietDTO convertToChiTietDTO(SanPhamChiTiet chiTiet) {
+
+    private SanPhamChiTietDTO convertToChiTietDTO(SanPhamChiTiet chiTiet, Long sanPhamMaSP) {
         SanPhamChiTietDTO dto = new SanPhamChiTietDTO();
         dto.setId(chiTiet.getId());
         dto.setKichCo(chiTiet.getKichCo());
         dto.setGia(chiTiet.getGia());
         dto.setSoLuong(chiTiet.getSoLuong());
+        if (sanPhamMaSP != null) {
+            dto.setMaSP(sanPhamMaSP.toString());
+        } else if (chiTiet.getSanPham() != null && chiTiet.getSanPham().getMaSP() != null) {
+            dto.setMaSP(chiTiet.getSanPham().getMaSP().toString());
+        } else {
+            dto.setMaSP(null);
+        }
         return dto;
     }
+
     @GetMapping("/oldest")
     public List<SanPhamDTO> getOldestProducts() {
-        List<SanPham> oldest = sanPhamService.getOldestProducts(10); // Lấy 10 sản phẩm cũ nhất
+        List<SanPham> oldest = sanPhamService.getOldestProducts(10);
         return oldest.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+
     @GetMapping("/search")
     public List<SanPhamDTO> searchByKeyword(@RequestParam String keyword) {
         List<SanPham> results = sanPhamService.searchByKeyword(keyword);
         return results.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
-
 }
