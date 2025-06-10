@@ -1,6 +1,8 @@
 package web.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import web.backend.model.KhachHang;
 import web.backend.repository.KhachHangRepository;
@@ -14,6 +16,7 @@ public class KhachHangServiceImpl implements IKhachHangService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public List<KhachHang> getAll() {
@@ -34,26 +37,47 @@ public class KhachHangServiceImpl implements IKhachHangService {
     public void delete(Long id) {
         khachHangRepository.deleteById(id);
     }
-    @Override
-    public Optional<KhachHang> login(String email, String matKhau) {
-        return khachHangRepository.findByEmailAndMatKhau(email, matKhau);
+//    @Override
+//    public Optional<KhachHang> login(String email, String matKhau) {
+//        return khachHangRepository.findByEmailAndMatKhau(email, matKhau);
+//    }
+//
+//    @Override
+//    public String register(KhachHang khachHang) {
+//        Optional<KhachHang> existingKhachHang = khachHangRepository.findByEmail(khachHang.getEmail());
+//        if (existingKhachHang.isPresent()) {
+//            return "Email đã tồn tại, vui lòng dùng email khác!";
+//        }
+//
+//        // Nếu chưa tồn tại, set ngày đăng ký hiện tại
+//        khachHang.setNgayDangKy(LocalDate.now());
+//
+//        // (Bạn có thể mã hóa mật khẩu ở đây trước khi lưu)
+//        // Ví dụ: khachHang.setMatKhau(passwordEncoder.encode(khachHang.getMatKhau()));
+//
+//        khachHangRepository.save(khachHang);
+//        return "Đăng ký thành công!";
+//    }
+@Override
+public String register(KhachHang khachHang) {
+    Optional<KhachHang> existingKhachHang = khachHangRepository.findByEmail(khachHang.getEmail());
+    if (existingKhachHang.isPresent()) {
+        return "Email đã tồn tại, vui lòng dùng email khác!";
     }
 
+    khachHang.setNgayDangKy(LocalDate.now());
+    khachHang.setMatKhau(passwordEncoder.encode(khachHang.getMatKhau()));
+    khachHangRepository.save(khachHang);
+    return "Đăng ký thành công!";
+}
+
     @Override
-    public String register(KhachHang khachHang) {
-        Optional<KhachHang> existingKhachHang = khachHangRepository.findByEmail(khachHang.getEmail());
-        if (existingKhachHang.isPresent()) {
-            return "Email đã tồn tại, vui lòng dùng email khác!";
+    public Optional<KhachHang> login(String email, String matKhau) {
+        Optional<KhachHang> user = khachHangRepository.findByEmail(email);
+        if (user.isPresent() && passwordEncoder.matches(matKhau, user.get().getMatKhau())) {
+            return user;
         }
-
-        // Nếu chưa tồn tại, set ngày đăng ký hiện tại
-        khachHang.setNgayDangKy(LocalDate.now());
-
-        // (Bạn có thể mã hóa mật khẩu ở đây trước khi lưu)
-        // Ví dụ: khachHang.setMatKhau(passwordEncoder.encode(khachHang.getMatKhau()));
-
-        khachHangRepository.save(khachHang);
-        return "Đăng ký thành công!";
+        return Optional.empty();
     }
     @Override
     public boolean emailExists(String email) {
