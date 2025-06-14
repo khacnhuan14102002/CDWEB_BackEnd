@@ -18,12 +18,18 @@ public class DonHang {
     private LocalDate ngayDat;
     private double tongTien;
     private String trangThai;
+
+    @Column(name = "phuong_thuc_thanh_toan")
     private String phuongThucThanhToan;
+
     private String diaChi;
     // Getters & Setters
-    @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL)
-    @JsonManagedReference
+//    @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<ChiTietDonHang> chiTietDonHang;
+    @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChiTietDonHang> chiTietDonHang;
+
 
     public DonHang() {
     }

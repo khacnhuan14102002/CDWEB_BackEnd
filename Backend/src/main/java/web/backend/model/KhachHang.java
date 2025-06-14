@@ -28,7 +28,7 @@ public class KhachHang {
     private String email;
 
     @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "^\\d{9,11}$", message = "Số điện thoại phải từ 9 đến 11 chữ số")
+    @Pattern(regexp = "^\\d{4,10}$", message = "Số điện thoại phải từ 4 đến 10 chữ số")
     private String soDienThoai;
 
     private String diaChi;
@@ -40,7 +40,7 @@ public class KhachHang {
     @PastOrPresent(message = "Ngày đăng ký không được lớn hơn ngày hiện tại")
     private LocalDate ngayDangKy;
 
-    @OneToMany(mappedBy = "khachHang", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "khachHang", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DonHang> donHangs;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'user'")
