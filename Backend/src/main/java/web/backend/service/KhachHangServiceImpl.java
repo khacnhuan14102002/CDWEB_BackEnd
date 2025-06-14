@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import web.backend.model.KhachHang;
+import web.backend.repository.DonHangRepository;
 import web.backend.repository.KhachHangRepository;
 
 import java.time.LocalDate;
@@ -17,6 +18,9 @@ public class KhachHangServiceImpl implements IKhachHangService {
     @Autowired
     private KhachHangRepository khachHangRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @Autowired
+    private DonHangRepository donHangRepository;
 
     @Override
     public List<KhachHang> getAll() {
@@ -32,12 +36,22 @@ public class KhachHangServiceImpl implements IKhachHangService {
     public KhachHang save(KhachHang khachHang) {
         return khachHangRepository.save(khachHang);
     }
+    @Override
+    public boolean hasDonHangByKhachHangId(Long id) {
+        return donHangRepository.existsByKhachHang_MaKH(id);
+    }
+
 
     @Override
     public void delete(Long id) {
+        if (hasDonHangByKhachHangId(id)) {
+            throw new IllegalStateException("Không thể xóa khách hàng vì đã có đơn hàng liên quan.");
+        }
         khachHangRepository.deleteById(id);
     }
-//    @Override
+
+
+    //    @Override
 //    public Optional<KhachHang> login(String email, String matKhau) {
 //        return khachHangRepository.findByEmailAndMatKhau(email, matKhau);
 //    }

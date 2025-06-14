@@ -10,7 +10,11 @@ public interface IKhachHangService {
     KhachHang save(KhachHang khachHang);
     void delete(Long id);
     Optional<KhachHang> login(String email, String matKhau);
+
+    boolean hasDonHangByKhachHangId(Long id);
+
     String register(KhachHang khachHang);
 
     boolean emailExists(String email);
+
 }
