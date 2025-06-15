@@ -38,32 +38,26 @@
         private KhachHangRepository khachHangRepository;
 
         @PostMapping("/login")
-        public ResponseEntity<?> login(@Valid @RequestBody Map<String, String> credentials, HttpServletRequest request) {
+        public ResponseEntity<?> login(@Valid @RequestBody Map<String, String> credentials) {
             String email = credentials.get("email");
             String matKhau = credentials.get("matKhau");
-            Locale locale = localeResolver.resolveLocale(request);
 
             Optional<KhachHang> khachHang = khachHangService.login(email, matKhau);
             if (khachHang.isPresent()) {
                 return ResponseEntity.ok(khachHang.get());
             } else {
-                String message = messageSource.getMessage("login.invalid", null, locale);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Sai email hoặc mật khẩu");
             }
         }
 
+
         @PostMapping("/register")
         public ResponseEntity<String> register(@Valid @RequestBody KhachHang khachHang, HttpServletRequest request) {
-            Locale locale = localeResolver.resolveLocale(request);
-            String message = khachHangService.register(khachHang);
-            if ("success".equals(message)) {
-                return ResponseEntity.ok(messageSource.getMessage("register.success", null, locale));
-            }
-            // Assuming 'message' here is already a key from your service if an error occurs
-            // If it's a raw string, you might want to return a generic error key or map it.
-            // For now, let's assume it's a key or a raw error from the service.
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+            khachHangService.register(khachHang);
+            return ResponseEntity.ok("Successfull");
         }
+
 
         @PostMapping("/check-email")
         public ResponseEntity<String> checkEmail(@Valid @RequestBody Map<String, String> requestBody, HttpServletRequest request) {

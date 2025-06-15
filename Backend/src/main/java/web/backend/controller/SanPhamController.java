@@ -131,4 +131,25 @@ public class SanPhamController {
         List<SanPham> results = sanPhamService.searchByKeyword(keyword);
         return results.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+    @GetMapping("/related")
+    public List<SanPhamDTO> getRelatedProducts(
+            @RequestParam Long danhmuc,
+            @RequestParam Long type,
+            @RequestParam(required = false) Long excludeId) {
+
+        List<SanPham> relatedProducts = sanPhamService.filterByDanhMucAndType(danhmuc, List.of(type));
+
+        // Loại bỏ sản phẩm đang xem (nếu truyền vào)
+        if (excludeId != null) {
+            relatedProducts = relatedProducts.stream()
+                    .filter(sp -> !sp.getMaSP().equals(excludeId))
+                    .limit(5)
+                    .collect(Collectors.toList());
+        } else {
+            relatedProducts = relatedProducts.stream().limit(5).collect(Collectors.toList());
+        }
+
+        return relatedProducts.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
 }

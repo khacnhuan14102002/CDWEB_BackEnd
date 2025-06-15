@@ -63,5 +63,8 @@ public class SanPhamServiceImpl implements ISanPhamService {
     public List<SanPham> searchByKeyword(String keyword) {
         return sanPhamRepository.searchByKeyword(keyword);
     }
-
+    @Override
+    public List<SanPham> filterByDanhMucAndType(Long danhmucId, List<Long> typeIds) {
+        return sanPhamRepository.findByDanhMucIdAndTypeIds(danhmucId, typeIds);
+    }
 }
