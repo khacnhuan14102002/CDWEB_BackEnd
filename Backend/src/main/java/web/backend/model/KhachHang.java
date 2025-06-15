@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -46,6 +47,19 @@ public class KhachHang {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'user'")
     private String role = "user";
     // Getters & Setters
+    @Column(name = "otp_code")
+    private String otpCode;
+
+    @Column(name = "otp_expiry")
+    private LocalDateTime otpExpiry;
+
+    // Getter & Setter
+    public String getOtpCode() { return otpCode; }
+    public void setOtpCode(String otpCode) { this.otpCode = otpCode; }
+
+    public LocalDateTime getOtpExpiry() { return otpExpiry; }
+    public void setOtpExpiry(LocalDateTime otpExpiry) { this.otpExpiry = otpExpiry; }
+
     public Long getMaKH() { return maKH; }
     public void setMaKH(Long maKH) { this.maKH = maKH; }
 
