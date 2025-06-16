@@ -65,6 +65,7 @@ public class SanPhamController {
     }
 
     @DeleteMapping("/{id}")
+
     public void delete(@PathVariable Long id) {
         sanPhamService.delete(id);
     }
