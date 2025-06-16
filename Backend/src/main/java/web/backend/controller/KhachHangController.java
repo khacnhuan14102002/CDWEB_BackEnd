@@ -11,6 +11,7 @@
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.web.bind.annotation.*;
     import org.springframework.web.servlet.LocaleResolver;
+    import web.backend.jwt.JwtUtil;
     import web.backend.model.DonHang;
     import web.backend.model.KhachHang;
     import web.backend.repository.KhachHangRepository;
@@ -43,6 +44,9 @@
         @Autowired
         private EmailService emailService;
 
+        @Autowired
+        private JwtUtil jwtUtil;
+
         @PostMapping("/login")
         public ResponseEntity<?> login(@Valid @RequestBody Map<String, String> credentials) {
             String email = credentials.get("email");
@@ -50,7 +54,11 @@
 
             Optional<KhachHang> khachHang = khachHangService.login(email, matKhau);
             if (khachHang.isPresent()) {
-                return ResponseEntity.ok(khachHang.get());
+                String token = jwtUtil.generateToken(khachHang.get());
+                return ResponseEntity.ok(Map.of(
+                        "token", token,
+                        "user", khachHang.get()
+                ));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Sai email hoặc mật khẩu");
